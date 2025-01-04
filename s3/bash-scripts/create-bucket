@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+echo "== create bucket"
+
+if [ -z "$1" ]; then
+    echo "Bucket name required"
+    exit 1
+fi
+
+aws s3api create-bucket --bucket $1

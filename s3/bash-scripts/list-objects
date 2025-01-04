@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+echo "== list obnects"
+
+if [ -z "$1" ]; then
+    echo "Bucket name required"
+    exit 1
+fi
+
+aws s3api list-objects-v2 --bucket $1
