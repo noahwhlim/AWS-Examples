@@ -1,24 +1,22 @@
 #! /usr/bin/env bash
+echo "== put-object"
 
-# exit if any command fails
-set -e
+if [ -z "$1" ]; then
+    echo "Bucket name required"
+    exit 1
+fi
 
-# location of file storage
-OUTPUT_DIR="/tmp/s3-bash-scripts"
+if [ -z "$2" ]; then
+    echo "File name required"
+    exit 1
+fi
 
-# remove folder if it already exists
-rm -r $OUTPUT_DIR
+BUCKET_NAME=$1
+FILENAME=$2
 
-# create output folder
-mkdir -p $OUTPUT_DIR
+OBJECT_KEY=$(basename "$FILENAME")
 
-
-NUM_FILES=$((RANDOM % 6 + 5))
-
-for ((i=1; i<=NUM_FILES; i++)); do
-    FILENAME="$OUTPUT_DIR/file_$i.txt"
-
-    dd if=/dev/urandom of="$FILENAME" bs=1024 count=$((RANDOM % 1024 + 1)) 2>/dev/null
-done
-
-tree $OUTPUT_DIR
+aws s3api put-object \
+--bucket $BUCKET_NAME \
+--body $FILENAME \
+--key $OBJECT_KEY
